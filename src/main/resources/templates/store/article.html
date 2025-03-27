@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Articles de la commande</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        h1, h3 {
+            color: #333;
+        }
+        div {
+            margin-bottom: 20px;
+        }
+        table {
+            width: 80%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            background-color: #ffffff;
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        td button {
+            background-color: #1e88e5;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        td button:hover {
+            background-color: #1565c0;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            width: 300px;
+            background-color: #fff;
+            padding: 15px;
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        form label {
+            margin: 10px 0 5px;
+        }
+        form input {
+            padding: 5px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+        }
+        form button {
+            background-color: #1e88e5;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+        }
+        form button:hover {
+            background-color: #1565c0;
+        }
+        .inline {
+            display: inline-block;
+            margin-right: 10px;
+        }
+        .return-link {
+            margin-top: 20px;
+            display: inline-block;
+            color: #1e88e5;
+            text-decoration: none;
+        }
+        .return-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Détails de la commande</h1>
+<div>
+    <p>Client: <span th:text="${commande.client.nom}"></span> <span th:text="${commande.client.prenom}"></span></p>
+</div>
+
+<h3>Articles dans la commande :</h3>
+
+<!-- Vérification si la liste des articles n'est pas vide -->
+<table th:if="${commande.articles != null and #lists.size(commande.articles) > 0}">
+    <thead>
+    <tr>
+        <th>Libellé</th>
+        <th>Quantité</th>
+        <th>Prix</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="article : ${commande.articles}">
+        <td th:text="${article.libelle}"></td>
+        <td th:text="${article.quantite}"></td>
+        <td th:text="${article.prix}"></td>
+        <td>
+            <form th:action="@{/store/article/delete}" method="post">
+                <input type="hidden" th:value="${commande.id_commande}" name="id_commande" />
+                <input type="hidden" th:value="${article.id_article}" name="id_article" />
+                <button type="submit">Supprimer</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<!-- Affichage du message si la liste des articles est vide -->
+<p th:if="${commande.articles == null or #lists.size(commande.articles) == 0}">
+    Aucun article dans cette commande.
+</p>
+
+<h3>Ajouter un nouvel article</h3>
+<form th:action="@{/store/article/create}" method="post">
+    <input type="hidden" th:value="${commande.id_commande}" name="id_commande" />
+
+    <label for="libelle">Libellé :</label>
+    <input type="text" id="libelle" name="libelle" required />
+
+    <label for="quantite">Quantité :</label>
+    <input type="number" id="quantite" name="quantite" required />
+
+    <label for="prix">Prix :</label>
+    <input type="number" step="0.01" id="prix" name="prix" required />
+
+    <button type="submit">Ajouter l'article</button>
+</form>
+
+<br>
+<a href="/store/index" class="return-link">Retour à la liste des commandes</a>
+
+</body>
+</html>

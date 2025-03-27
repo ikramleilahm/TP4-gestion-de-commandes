@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Index - Store</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        h2 {
+            color: #333;
+            margin-top: 20px;
+        }
+
+        /* Formulaire de création de commande */
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            width: 500px;
+            margin: 20px 0;
+        }
+
+        label {
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 8px;
+            margin-right: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Tableau des commandes */
+        table {
+            width: 60%; /* Tableau ne prend pas toute la largeur */
+            margin-top: 20px;
+            border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        table th, table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        table th {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        table tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .logout-link {
+            margin: 10px 0;
+            display: inline-block;
+            color: #ff0000;
+            font-weight: bold;
+        }
+
+        .logout-link:hover {
+            color: #cc0000;
+        }
+
+        .no-commandes {
+            color: #888;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>
+    <p th:if="${client}" th:text="'Bonjour ' + ${client.nom} + ' ' + ${client.prenom}"></p>
+</h1>
+
+<!-- Lien de déconnexion -->
+<a th:href="@{/store/logout}" class="logout-link" onclick="return confirm('Êtes-vous sûr de vouloir vous déconnecter ?');">Se déconnecter</a>
+
+<h2>Ajouter une commande</h2>
+<!-- Formulaire avec champ et bouton sur la même ligne -->
+<form th:action="@{/store/commande/create}" method="post">
+    <label for="nom_comm">Nom de la commande:</label>
+    <input type="text" id="nom_comm" name="nom_comm" required />
+    <button type="submit">Créer</button>
+</form>
+
+<h2>Mes commandes</h2>
+<!-- Tableau pour afficher les commandes -->
+<div th:if="${commandes != null}">
+    <table>
+        <thead>
+        <tr>
+            <th>Nom de la commande</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="commande : ${commandes}">
+            <td th:text="${commande.nom_comm}"></td>
+            <td>
+                <!-- Lien pour voir les détails de la commande -->
+                <a th:href="@{'/store/commande/' + ${commande.id_commande}}">Voir détails</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Message lorsqu'il n'y a aucune commande -->
+<div th:if="${commandes == null}" class="no-commandes">
+    <p>Aucune commande trouvée.</p>
+</div>
+
+</body>
+</html>
