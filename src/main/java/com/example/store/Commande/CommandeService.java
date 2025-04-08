@@ -32,4 +32,8 @@ public class CommandeService implements CommandeItf {
         return repo.save(commande);
     }
 
+    @Override
+    public void delete(Long id_commande) {
+        repo.deleteById(id_commande);
+    }
 }
