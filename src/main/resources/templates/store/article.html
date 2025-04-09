@@ -142,9 +142,7 @@
 <a href="/store/index" class="return-link">Retour à la liste des commandes</a>
 
 <h3>Passer la commande</h3>
-<p>Pour valider la commande, cliquez sur le bouton ci-dessous.</p>
-<form th:action="@{/kafka/commande/{id}(id=${commande.id})}" method="post">
-    <input type="hidden" th:value="${commande.id_commande}" name="id_commande" />
+<form th:action="@{/kafka/commande/{id}(id=${commande.id_commande})}" method="post">
     <button type="submit" style="background-color: #28a745;">Valider la commande</button>
 </form>
 

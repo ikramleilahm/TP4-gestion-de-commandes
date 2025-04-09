@@ -7,10 +7,9 @@ import com.example.store.Commande.Commande;
 import com.example.store.Commande.CommandeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 
 @Controller
@@ -23,11 +22,10 @@ public class KafkaController {
     @Autowired
     private ArticleService articleService;
 
-    @GetMapping("/commande/{id}")
+    @PostMapping("/commande/{id}")
     public ModelAndView validerEtSupprimerCommande(@PathVariable Long id) {
         ModelAndView modelAndView = new ModelAndView();
         Commande commande = commandeService.findById(id);
-
         if (commande != null) {
             for (Article article : commande.getArticles()) {
                 String message = article.getLibelle() + " " + article.getQuantite();
@@ -37,9 +35,13 @@ public class KafkaController {
         } else {
             System.out.println("Commande non trouvée pour l'id : " + id);
         }
-
         modelAndView.setViewName("redirect:/store/article");
+
         return modelAndView;
+
+
     }
+
+
 
 }
